@@ -1,5 +1,8 @@
 import React, {useReducer, useEffect} from 'react'
 import GameBoard from './components/game-board'
+import SideMenu from './components/side-menu'
+import Modal from './components/modal'
+import './app.css'
 import {initialState, GameReducer} from './reducers/game-reducer'
 
 const App = (props) => {
@@ -16,6 +19,11 @@ const App = (props) => {
 
 	const keyDownHandler = (e) => {
 		switch(e.keyCode) {
+			case 32: {
+				dispatch("DROP")
+				
+				break
+			}
 			case 37: {
 				dispatch("MOVE_LEFT")
 
@@ -33,7 +41,6 @@ const App = (props) => {
 			}
 			case 40: {
 				dispatch("MOVE_DOWN")
-				console.log("moving down")
 				break
 			}
 			default: {
@@ -45,10 +52,18 @@ const App = (props) => {
 
     return (
         <section className="section">
-            <h1 className="title is-1">
-                all working
-            </h1>
-            <GameBoard state={state} dispatch={dispatch}></GameBoard>
+        	<div className="columns">
+	        	<div className="column is-6 is-offset-3">
+		        	<h1 className="title is-1">
+		        	    Tetris game
+		        	</h1>
+			        <div className="tile is-ancestor notification is-info">
+		        		<GameBoard state={state} dispatch={dispatch}></GameBoard>
+						<SideMenu state={state} dispatch={dispatch}></SideMenu>
+			        </div>
+	        	</div>
+        	</div>
+            <Modal isPlaying={state.isPlaying} isDead={state.isDead} score={state.score} dispatch={dispatch}></Modal>
         </section>
     )
 }

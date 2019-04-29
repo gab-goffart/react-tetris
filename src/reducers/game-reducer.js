@@ -2,7 +2,6 @@ import {shapes, colors} from '../models/tetromino'
 
 const ROWS = 20
 const COLS = 10
-const EMPTY = "#fff"
 
 const index = Math.floor(Math.random() * shapes.length)
 const nextIndex = Math.floor(Math.random() * shapes.length)
@@ -33,46 +32,72 @@ export const initialState = {
 	score: 0,
 	time: 1000,
 	isPlaying: true,
+	isDead: false
 }
 
 export const GameReducer = (state, action) => {
 	let newState = {...state}
 	//don't do anything if not playing
-	if(!newState.isPlaying) {
-		return newState
-	}
+
+		
 
 	newState.board = undraw(newState.board, newState.active, newState.position)
 
 	switch (action) {
 		case 'MOVE_LEFT': {
+			if(!newState.isPlaying) {
+				break
+			}
+
 			newState.position.x--
+			if(checkCollision(newState.board, newState.active, newState.position)) {
+				newState.position.x++
+			}
 			break
 		}
 		case 'MOVE_RIGHT': {
+			if(!newState.isPlaying) {
+			return newState
+			}
+
 			newState.position.x++
+			if(checkCollision(newState.board, newState.active, newState.position)) {
+				newState.position.x--
+			}
 
 			break
 		}
 		case 'MOVE_DOWN': {
+			if(!newState.isPlaying) {
+				break
+			}
+
 			newState.position.y++
 
 			if(checkCollision(newState.board, newState.active, newState.position)) {
 				newState.position.y--
-				//try to lock the piece
 				if(!canLock(newState.position)) {
-					//newState.isPlaying = false
-					newState.score = 0
-					newState.position = {x: 3, y: 0}
-					newState.board = resetBoard(newState.board)
+					newState.isPlaying = false
+					newState.isDead = true
 					return newState
 				}
 				
 				newState.board = draw(newState.board, newState.active, newState.position, newState.color)
 				newState.position.x = 3
 				newState.position.y = 0
+				newState.score += 50
+
+				const c = flushRows(newState.board)
+				if(c.nb > 0) {
+					newState.board = c.board
+				console.log("flushed")
+
+					newState.time = newState.time - c.nb * 2
+					newState.score += 400 * Math.pow(2, c.nb)
+				}
 
 				newState.index = newState.nextIndex
+				newState.activeIndex = 0
 				newState.shape = newState.nextShape
 				newState.active = newState.nextActive
 				newState.color = newState.nextColor
@@ -81,31 +106,96 @@ export const GameReducer = (state, action) => {
 				newState.nextShape = shapes[newState.nextIndex]
 				newState.nextActive = shapes[newState.nextIndex][0]
 				newState.nextColor = colors[newState.nextIndex]
-
+				
 			}
 
 			break
 		}
-		case 'ROTATE': {
+		case 'DROP': {
+			if(!newState.isPlaying) {
+				return newState
+			}
+			while(!checkCollision(newState.board, newState.active, newState.position)) {
+				newState.position.y++
+				//try to lock the piece
+			}
+			newState.position.y--
 
+   			if(!canLock(newState.position)) {
+				newState.isPlaying = false
+				newState.isDead = true
+				return newState
+			}
+			
+			newState.board = draw(newState.board, newState.active, newState.position, newState.color)
+			newState.position.x = 3
+			newState.position.y = 0			
+			newState.score += 50
+
+			const c = flushRows(newState.board)
+			if(c.nb > 0) {
+				newState.board = c.board
+				newState.time = newState.time - c.nb * 2
+				newState.score += 400 * Math.pow(2, c.nb)
+			}
+
+			newState.index = newState.nextIndex
+			newState.activeIndex = 0
+			newState.shape = newState.nextShape
+			newState.active = newState.nextActive
+			newState.color = newState.nextColor
+
+			newState.nextIndex = Math.floor(Math.random() * shapes.length)
+			newState.nextShape = shapes[newState.nextIndex]
+			newState.nextActive = newState.nextShape[0]
+			newState.nextColor = colors[newState.nextIndex]
 			break
 		}
-		case 'GAME_OVER': {
-			newState.isPlaying = false
+		case 'ROTATE': {
+			if(!newState.isPlaying) {
+				break
+			}
+
+			newState.activeIndex++
+			newState.active = newState.shape[newState.activeIndex % newState.shape.length]
+			if(checkCollision(newState.board, newState.active, newState.position)) {
+				newState.activeIndex--
+				newState.active = newState.shape[newState.activeIndex % newState.shape.length]
+			}
 			break
 		}
 		case 'TOGGLE': {
-
+			newState.isPlaying = !newState.isPlaying
 			break
 		}
 		case 'RESET':  {
+			newState.position.x = 3
+			newState.position.y = 0
+			newState.time = initialState.time
+			newState.board = resetBoard(newState.board)
 
+			newState.index = Math.floor(Math.random() * shapes.length)
+			newState.shape = shapes[newState.index]
+			newState.active = newState.shape[0]
+			newState.color = colors[newState.index]
+
+			newState.nextIndex = Math.floor(Math.random() * shapes.length)
+			newState.nextShape = shapes[newState.nextIndex]
+			newState.nextActive = shapes[newState.nextIndex][0]
+			newState.nextColor = colors[newState.nextIndex]
+
+			newState.score = 0
+			newState.isPlaying = true
+			newState.isDead = false
 			break
 		}
 		default: {
 			break
 		}
 	}
+
+
+
 	newState.board = draw(newState.board, newState.active, newState.position, newState.color)
 	return newState
 }
@@ -159,18 +249,18 @@ const canLock = (position) => {
 const flushRows = (board) => {
 	let full = true
 	let nb = 0
-
-	for(let i = 0; i < board; i++) {
+	for(let i = 0; i < board.length; i++) {
 		for(let j = 0; j < board[i].length; j++) {
-			if(board[i][j] === EMPTY) {
+			if(board[i][j] === null) {
 				full = false
 			}
 		} 
 
 		if(full) {
 			nb++
-			flushRow(board, i)
+			board = flushRow(board, i)
 		}
+		full = true
 	}
 	
 	return {nb: nb, board: board}
@@ -178,13 +268,15 @@ const flushRows = (board) => {
 }
 
 const flushRow = (board, index) => {
-	for(let i = index; i > 0; i++) {
-		board[i] = board[i - 1]
+	for(let i = index; i > 0; i--) {
+		board[i] = [...board[i - 1]]
 	}
 
 	for(let i = 0; i < board[0].length; i++) {
-		board[0][i] = EMPTY
+		board[0][i] = null
 	}
+
+	return board
 }
 
 const resetBoard = (board) => {
