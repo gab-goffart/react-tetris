@@ -1,29 +1,38 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 
-const Modal = ({isDead, isPlaying, score, dispatch}) => {
-	let classes = "modal"
-
-	if(isDead) {
-		classes += " is-active"
-	}
+const Modal = ({isDead, score, dispatch}) => {
 
 	const resetHandler = (e) => {
 		dispatch("RESET")
 	}
 
+	useEffect(() => {
+		if(isDead) {
+			document.querySelector(".modal").className += " is-visible"
+		} else {
+			document.querySelector(".modal").className = "modal";
+		}
+	}, [isDead])
+
+	const closeModal = (e) => {
+		document.querySelector(".modal").className = "modal";
+	}
+	
 	return (
-		<div className={classes}>
-			<div className="modal-background"></div>
-			<div className="modal-card">
-				<header className="modal-card-head">
-					You are dead!
-				</header>
-				<section className="modal-card-body">
-					Looks like you died. Your score is {score}. Would you like to play another game?
-				</section>
-				<footer className="modal-card-foot">
-					<button className="button is-outlined" onClick={resetHandler}>Play again</button>
-				</footer>
+		<div className="modal" onClick={closeModal}>
+			<div className="modal-content">
+				<div className="modal-header">
+					<h3>You died!</h3>
+				</div>
+				<div className="modal-body">
+					<p>Looks like you died! :(  You scored {score}. Would you like to play again?</p>
+				</div>
+				<div className="modal-footer">
+					<div className="buttons">
+						<button className="button is-success is-rounded" onClick={resetHandler}>Yes</button>
+						<button className="button is-danger is-rounded" onClick={closeModal}>No</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	)

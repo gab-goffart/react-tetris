@@ -1,7 +1,10 @@
 import React, {useReducer, useEffect} from 'react'
 import GameBoard from './components/game-board'
-import SideMenu from './components/side-menu'
 import Modal from './components/modal'
+import Score from './components/score'
+import NextPiece from './components/next-piece'
+import Menu from './components/menu'
+import GameState from './components/game-state'
 import './app.css'
 import {initialState, GameReducer} from './reducers/game-reducer'
 
@@ -51,20 +54,17 @@ const App = (props) => {
 	}
 
     return (
-        <section className="section">
-        	<div className="columns">
-	        	<div className="column is-6 is-offset-3">
-		        	<h1 className="title is-1">
-		        	    Tetris game
-		        	</h1>
-			        <div className="tile is-ancestor notification is-info">
-		        		<GameBoard state={state} dispatch={dispatch}></GameBoard>
-						<SideMenu state={state} dispatch={dispatch}></SideMenu>
-			        </div>
-	        	</div>
-        	</div>
+        <div className="container">
+	        <div className="grid">
+		        <h1 className="has-text-centered main-header">Tetris game</h1>
+        		<GameBoard state={state} dispatch={dispatch}></GameBoard>
+				<NextPiece piece={state.nextActive} color={state.nextColor}></NextPiece>
+				<Score score={state.score}></Score>
+				<GameState gameState={state.isDead ? "Dead" : state.isPlaying ? "Playing" : "Paused"}></GameState>
+				<Menu dispatch={dispatch}></Menu>
+	        </div>
             <Modal isPlaying={state.isPlaying} isDead={state.isDead} score={state.score} dispatch={dispatch}></Modal>
-        </section>
+        </div>
     )
 }
 

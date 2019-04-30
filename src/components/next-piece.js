@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react'
 
-const SQ = 35
+const SQ = 50
 
 const NextPiece = ({piece, color}) => {
 	let ctx = null
@@ -33,7 +33,7 @@ const NextPiece = ({piece, color}) => {
 	}, [piece])
 
 	return (
-		<div className="tile is-child notification is-warning">
+		<div className="next box has-background-warning has-text-centered">
 			<h3 className="title is-3">Your next piece :</h3>
 			<canvas ref={canvas} height={SQ * 4} width={SQ * 4}></canvas>
 		</div>

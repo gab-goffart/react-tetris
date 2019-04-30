@@ -1,9 +1,9 @@
 import React from 'react'
 
-const GameState = ({isPlaying}) => {
+const GameState = ({gameState}) => {
 	return (
-		<div className="tile is-child notification is-warning">
-			<h3 className="title is-3">Currently {isPlaying ? "playing" : "paused"}</h3>
+		<div className="state box has-background-warning has-text-centered">
+			<h3 className="title is-3">Currently {gameState}</h3>
 		</div>
 	)
 

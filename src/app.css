@@ -1,4 +1,303 @@
+/****************************************/
+/* BASIC DEFAULT STYLING 				*/
+/****************************************/
+
 canvas {
 	border: 10px solid white;
 	border-radius: 4px;
+}
+
+body {
+	font-family: CodenewRoman Nerd Font, Ubuntu, sans-serif;
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	min-width: 100%;
+	color: #2c2c2c;
+	background-color: #dcdcdc;
+}
+
+h1 {
+	font-size: 3rem;
+	font-weight: bolder;
+}
+
+h2 {
+	font-size: 2.5rem;
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+/****************************************/
+/* BASIC GRID LAYOUT 					*/
+/****************************************/
+
+.grid {
+	display: grid;
+
+	grid-gap: 2rem;
+	grid-template-columns: 
+		2fr 1fr 1fr;
+	grid-template-rows: 
+		1fr ;
+	grid-auto-rows: 2fr;
+	grid-template-areas: 
+		"title 	title 	title"
+		"board 	next 	score"
+		"board 	next 	state"
+		"board 	next 	menu";
+}
+
+.main-header {
+	grid-area: title;
+}
+
+.board {
+	grid-area: board;
+}
+.next {
+	grid-area: next;
+}
+
+.title {
+	grid-area: title;
+}
+
+.score {
+	grid-area: score;
+}
+
+.state {
+	grid-area: state;
+}
+
+.menu {
+	grid-area: menu;
+}
+
+/****************************************/
+/* BASIC COLOR MODIFIERS	 			*/
+/****************************************/
+
+.has-background-info {
+	background-color: #2196F3;
+}
+
+.has-background-success {
+	background-color: #4CAF50;
+}
+
+.has-background-danger {
+	background-color: #F44336;
+}
+
+.has-background-warning {
+	background-color: #FF9800;
+}
+
+.has-text-centered {
+	text-align: center;
+}
+
+/****************************************/
+/* BASIC BUTTON 						*/
+/****************************************/
+
+.button {
+	margin: 0.5rem;
+	padding: 0.5rem;
+	align-content: center;
+	text-align: center;
+	border: 0;
+	transition-duration: 0.3s;
+	min-width: 20%;
+	background-color: #e7e7e7;
+	color: black;
+}
+
+.button.is-outlined {
+	background-color: #e7e7e7;
+	border: 0.2em solid;
+	color: #2196F3;
+	border-color: #2196F3;
+}
+
+.button:hover {
+	background-color: #ddd;
+}
+.button.is-outlined:hover {
+
+}
+
+/****************************************/
+/*BASIC BUTTON WITH IS-INFO MODIFIER 	*/
+/****************************************/
+
+.is-info {
+	background-color: #2196F3;
+	color: white;
+}
+.is-info.is-outlined {
+	background-color: white;
+	border: 0.2em solid;
+	color: #2196F3;
+	border-color: #2196F3;
+}
+
+.is-info:hover {
+	background-color: #0B7DDA;
+}
+.is-info.is-outlined:hover {
+	background-color: #2196F3;
+	color: white;
+}
+
+
+/****************************************/
+/*BASIC BUTTON WITH IS-SUCESS MODIFIER 	*/
+/****************************************/
+
+.is-success {
+	background-color: #4CAF50;
+	color: white;
+}
+.is-success.is-outlined {
+	background-color: white;
+	border: 0.2em solid;
+	color: #4CAF50;
+	border-color: #4CAF50;
+}
+
+.is-success:hover {
+	background-color: #46A049;
+}
+.is-success.is-outlined:hover {
+	color: white;
+	background-color: #4CAF50;
+}
+
+/****************************************/
+/*BASIC BUTTON WITH IS-ERROR MODIFIER 	*/
+/****************************************/
+
+.is-danger {
+	background-color: #F44336;
+	color: white;
+}
+.is-danger.is-outlined {
+	background-color: white;
+	border: 2px solid;
+	color: #F44336;
+	border-color: #F44336;
+}
+
+.is-danger:hover {
+	background-color: #DA190B;
+}
+.is-danger.is-outlined:hover {
+	color: white;
+	background-color: #F44336;
+}
+
+/****************************************/
+/*BASIC BUTTON WITH IS-WARNING MODIFIER */
+/****************************************/
+
+.is-warning {
+	background-color: #FF9800;
+	color: white;
+}
+.is-warning.is-outlined {
+	background-color: white;
+	color: #FF9800;
+	border-color: #FF9800;
+}
+
+.is-warning:hover {
+	background-color: #E68A00;
+}
+.is-warning.is-outlined:hover {
+	color: white;
+	background-color: #FF9800;
+}
+
+/****************************************/
+/* BASIC CONTENT MODIFIERS 			 	*/
+/****************************************/
+
+.is-fullwidth {
+	width: 100%;
+}
+
+.is-visible {
+	display: block !important;
+}
+
+.is-rounded {
+	border-radius: 5px;
+}
+
+.is-vertical {
+	flex-flow: column;
+}
+
+/****************************************/
+/* BASIC MODAL 							*/
+/****************************************/
+
+.modal {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+	position: absolute;
+	left: 40%;
+	top: 40%;
+	width: 20%;
+	background-color: #fff;
+	border-radius: 10px;
+	border: 1px solid gray;
+	padding: 2%;
+
+}
+
+/****************************************/
+/* BASIC CONTAINERS 					*/
+/****************************************/
+
+.container {
+	margin: 0 10%;
+}
+
+.box {
+	border-radius: 5px;
+	border: 1px solid gray;
+	box-shadow: 
+		0 2px 3px rgba(0, 0, 0, 0.1), 
+		0 0 0 1px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+}
+
+.buttons {
+	display: flex;
+}
+
+.buttons > .button {
+	margin: 0 0.5rem;
+}
+
+.buttons.is-vertical > .button {
+	margin: 0.5rem 0;
 }

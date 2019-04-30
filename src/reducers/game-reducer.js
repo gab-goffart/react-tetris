@@ -165,6 +165,9 @@ export const GameReducer = (state, action) => {
 			break
 		}
 		case 'TOGGLE': {
+			if(newState.isDead) {
+				break
+			}
 			newState.isPlaying = !newState.isPlaying
 			break
 		}

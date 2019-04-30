@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 
-const SQ = 35
+const SQ = 40
 
 const GameBoard = ({state, dispatch}) => {
 	const canvas = useRef(null)
@@ -11,17 +11,7 @@ const GameBoard = ({state, dispatch}) => {
 		ctx = canvas.current.getContext("2d")
 		setCtx(ctx)
 		ctx.lineWidth = "2"
-		animation = setInterval(moveDown, state.time)
-		setAnimation(animation)
-
-		return () => {
-			setAnimation(a => {
-				window.clearInterval(a)
-				return null
-			})
-		}
-
-	}, [state.time])
+	}, [])
 
 	useEffect(() => {
 		ctx.fillStyle = "#000"
@@ -37,19 +27,29 @@ const GameBoard = ({state, dispatch}) => {
 				}
 			}
 		}
-
-
 	})
+	useEffect(() => {
+
+		animation = setInterval(moveDown, state.time)
+		setAnimation(animation)
+
+		return () => {
+			setAnimation(a => {
+				window.clearInterval(a)
+				return null
+			})
+		}
+
+	}, [state.time])
+
 
 	const moveDown = () => {
 		dispatch("MOVE_DOWN")
 	}
 
 	return (
-		<div className="tile is-parent has-text-centered notification is-info">
-	        <div className="tile is-child">
-            	<canvas ref={canvas} height={20 * SQ} width={10 * SQ}></canvas> 
-	        </div>
+		<div className="board box has-background-info has-text-centered">
+        	<canvas ref={canvas} height={20 * SQ} width={10 * SQ}></canvas> 
 	    </div>
     )
 }
